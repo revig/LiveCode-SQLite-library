@@ -10,7 +10,7 @@ It is meant to be used with desktop and mobile apps.
 Place the library in the message path, then call the rigLoadDatabase  
 function to connect to your database like:  
 
-`get rigLoadDatabase(tParams, tReturn, tActiveGroup, tOptions)`
+    get rigLoadDatabase(tParams, tReturn, tActiveGroup, tOptions)
 
 -   **tParams** can optionally be a path  
     to a database or an array of database settings like the settings  
@@ -28,11 +28,13 @@ Alternatively you can connect to an in-memory database or to a
 new database. Build an initial table using the rigNewTableStructure()  
 function and connect using the rigConnectDB handler like:
 
-`put "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT" into tInitTableA["recipe"][1]["ID"]
-put "varchar(255,0) DEFAULT NULL" into tInitTableA["recipe"][2]["Name"]
-put "TEXT" into tInitTableA["recipe"][3]["Directions"]
-put rigNewTableStructure(tInitTableA) into tInitTable
-rigConnectDB tDBfilePath, tInitTable tReturn tActiveGroup tOptions`
+    put "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT" into tInitTableA["recipe"][1]["ID"]
+    put "varchar(255,0) DEFAULT NULL" into tInitTableA["recipe"][2]["Name"]
+    put "TEXT" into tInitTableA["recipe"][3]["Directions"]
+
+    put rigNewTableStructure(tInitTableA) into tInitTable
+
+    rigConnectDB tDBfilePath, tInitTable tReturn tActiveGroup tOptions
 
 -   **tDBfilePath** the value of this optional parameter can be  
     empty or a file path or "memory" or "mem" or "in-memory" or  
