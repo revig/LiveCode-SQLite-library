@@ -5,6 +5,10 @@ and includes all features as described in the revIgniter User Guide
 (see chapter [Database Library](https://revigniter.com/userGuide/database/index.html)).  
 It is meant to be used with desktop and mobile apps.  
 
+### Requirements
+
+LiveCode version 9 or higher  
+
 ### How to use this library:
 
 Place the library in the message path, then call the rigLoadDatabase  
@@ -50,6 +54,31 @@ function and connect using the rigConnectDB handler like:
     configuration group a name.  
 -   **tOptions** is a comma delimited list of SQLite options. It can  
     be empty or can contain "binary", "extensions" or both.
+
+### How to convert a query result array to a datagrid array:
+
+This library provides a handler which converts database query result arrays  
+to datagrid arrays.  
+
+    queryResultArrayToDgArray @pArray pFields
+
+-   **pArray** is the database query result index named "resultarray"  
+-   **pFields** is the database query result index "fieldnames" which  
+    contains the table field names in a numbered array
+
+Here is an example:
+
+    # ALL QUERY DATA
+    put rigDbGet("recipe") into tQuery
+      
+    # THE QUERY RESULT ARRAY
+    put tQuery["resultarray"] into tDataGridArray
+       
+    # CONVERT RESULT ARRAY TO DATGRID ARRAY
+    queryResultArrayToDgArray tDataGridArray, tQuery["fieldnames"] 
+       
+    # POPULATE DATAGRID
+    set the dgData of grp "myDatagrid" to tDataGridArray
 
 ### License
 
