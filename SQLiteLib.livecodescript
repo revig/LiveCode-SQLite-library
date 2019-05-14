@@ -42,7 +42,7 @@ end libraryStack
 on releaseStack
    if the short name of the target = the short name of me then
       -- Put cleanup stuff here:
-      get _rigCloseDB()
+      get rigCloseDB()
       
       if the environment is "development" then
          answer the target & " got releaseStack message"
@@ -1849,7 +1849,7 @@ end _rigHasOperator
 
 
 /*----------------------------------------------------------------------
---| FUNCTION _rigCloseDB
+--| FUNCTION rigCloseDB
 --|
 --| Author: rabit
 --| Version:  1.1
@@ -1859,14 +1859,14 @@ end _rigHasOperator
 --|
 --| Summary: This handler closes the database connection.
 --| 
---| Format:  _rigCloseDB()
+--| Format:  rigCloseDB()
 --|
 --| Parameters: --
 --|
 --| Return: mixed
 ----------------------------------------------------------------------*/
 
-private function _rigCloseDB
+function rigCloseDB
    local tResult
    
    if sDBdriverSettings["connid"] is an integer then
@@ -1876,7 +1876,7 @@ private function _rigCloseDB
    put empty into sDatabaseID
    
    return tResult
-end _rigCloseDB
+end rigCloseDB
 
 
 
