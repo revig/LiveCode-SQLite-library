@@ -38,7 +38,7 @@ function and connect using the rigConnectDB handler like:
 
     put rigNewTableStructure(tInitTableA) into tInitTable
 
-    rigConnectDB tDBfilePath, tInitTable tReturn tActiveGroup tOptions
+    rigConnectDB tDBfilePath, tInitTable, tReturn, tActiveGroup, tOptions
 
 -   **tDBfilePath** the value of this optional parameter can be  
     empty or a file path or "memory" or "mem" or "in-memory" or  
@@ -60,7 +60,7 @@ function and connect using the rigConnectDB handler like:
 This library provides a handler which converts database query result arrays  
 to datagrid arrays.  
 
-    queryResultArrayToDgArray @pArray pFields
+    queryResultArrayToDgArray @pArray, pFields
 
 -   **pArray** is the database query result index named "resultarray"  
 -   **pFields** is the database query result index "fieldnames" which  
@@ -86,7 +86,7 @@ For the license terms see the LICENSE file.
 
 ### Meta
 
-Version: 1.0.1  
+Version: 1.0.2  
 Web Site: <https://revigniter.com/>  
 
 Author:  Ralf Bitter
