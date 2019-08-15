@@ -1706,22 +1706,22 @@ end rigDbFieldData
 --| FUNCTION rigDbInsertString
 --|
 --| Author: rabit
---| Version:  1.1
---| Created: 01-10-09
---| Last Mod: 14-10-09
+--| Version:  1.2
+--| Created: 2009-10-01
+--| Last Mod: 2019-08-08
 --| Requires: _rigEscapeIdentifiers(), rigDbEscape(), _rigProtectIdentifiers(), _rigInsert()
 --|
 --| Summary: Generate an insert string.
 --| 
---| Format:  rigDbInsertString(param1, param2)
+--| Format:  rigDbInsertString(param1, param2[, param3])
 --|
 --| Parameters: string <pTable> the table upon which the query will be performed,
---|                       array <pData> an associative array data of key/values
+--|                       array <pData> an associative array data of key/values, bool <pReplace> (optional)
 --|
 --| Return: string
 ----------------------------------------------------------------------*/
 
-function rigDbInsertString pTable pData
+function rigDbInsertString pTable pData pReplace
    local tCounter, tVal, tFields, tValues, tTable
    
    put 0 into tCounter
@@ -1735,7 +1735,7 @@ function rigDbInsertString pTable pData
    
    put _rigProtectIdentifiers(pTable, TRUE, NULL, FALSE) into tTable
    	
-   return _rigInsert(tTable, tFields, tValues)
+   return _rigInsert(tTable, tFields, tValues, pReplace)
 end rigDbInsertString
 
 
@@ -2840,25 +2840,30 @@ end _rigFromTables
 --| FUNCTION _rigInsert
 --|
 --| Author: rabit
---| Version:  1.0
---| Created: 11-04-14
---| Last Mod: --
+--| Version:  1.1
+--| Created: 2014-04-11
+--| Last Mod: 2019-08-08
 --| Requires: --
 --|
 --| Summary: Generates a platform-specific insert string from the supplied data.
 --| 
---| Format:  _rigInsert(param1, param2, param3)
+--| Format:  _rigInsert(param1, param2, param3[, param4])
 --|
---| Parameters: string <pTable> the table name, array <pKeys> the insert keys, array <pValues> the insert values
+--| Parameters: string <pTable> the table name, array <pKeys> the insert keys,
+--|               array <pValues> the insert values, bool <pReplace> (optional)
 --|
 --| Return: string
 ----------------------------------------------------------------------*/
 
-private function _rigInsert pTable pKeys pValues
+private function _rigInsert pTable pKeys pValues pReplace
 	combine pKeys using comma
 	combine pValues using comma
 
-	return "INSERT INTO " & pTable & " (" & pKeys & ") VALUES (" & pValues & ")"
+	if pReplace <> TRUE then
+		return "INSERT INTO " & pTable & " (" & pKeys & ") VALUES (" & pValues & ")"
+	else
+		return "INSERT OR REPLACE INTO " & pTable & " (" & pKeys & ") VALUES (" & pValues & ")"
+	end if
 end _rigInsert
 
 
@@ -6372,24 +6377,25 @@ end rigDbGetWhere
 --| FUNCTION rigDbInsert
 --|
 --| Author: rabit
---| Version:  1.0
---| Created: 22-04-14
---| Last Mod: --
+--| Version:  1.1
+--| Created: 2014-04-22
+--| Last Mod: 2019-08-08
 --| Requires: rigDbValuesSet(), dbErrorHandling, _rigProtectIdentifiers(), rigArrayKeys()
 --|            rigArrayValues(), _rigInsert(), _rigResetWrite, rigDbQuery(), _rigDbLastInsertID()
 --|
 --| Summary: Compiles an insert string and runs the query.
 --| 
---| Format:  rigDbInsert(param1, param2, param3)
+--| Format:  rigDbInsert(param1, param2[, param3][, param4])
 --|
 --| Parameters: string <pTable> the table to retrieve the results from, array <pInsertVals>
 --| 			      an associative array of insert values, bool <pLastInsertID> flag which determines
---| 			      if the last automatically generated ID value of an AUTO_INCREMENT column should be returned
+--| 			      if the last automatically generated ID value of an AUTO_INCREMENT column should be returned (optional),
+--|             bool <pReplace> (optional)
 --|
 --| Return: mixed
 ----------------------------------------------------------------------*/
 
-function rigDbInsert pTable pInsertVals pLastInsertID
+function rigDbInsert pTable pInsertVals pLastInsertID pReplace
    local tInsertVals, tLastInsertID, tTable, tArrayKeys, tArrayValues, tSQL, tResultVal
    
    if pInsertVals is an array then
@@ -6431,7 +6437,7 @@ function rigDbInsert pTable pInsertVals pLastInsertID
    put rigArrayKeys(sActiveRecord["set"]) into tArrayKeys
    put rigArrayValues(sActiveRecord["set"], FALSE) into tArrayValues -- use apostrophes (false) is already done by rigDbValuesSet(pInsertVals)
    
-   put _rigInsert(tTable, tArrayKeys, tArrayValues) into tSQL
+   put _rigInsert(tTable, tArrayKeys, tArrayValues, pReplace) into tSQL
    
    _rigResetWrite
    
