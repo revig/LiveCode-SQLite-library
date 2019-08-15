@@ -6457,6 +6457,61 @@ end rigDbInsert
 
 
 /*----------------------------------------------------------------------
+--| COMMAND rigDBinsertQueryArray
+--|
+--| Author: rabit
+--| Version:  1.0
+--| Created: 2019-08-08
+--| Last Mod: --
+--| Requires: rigDbInsert(), dbErrorHandling
+--|
+--| Summary: Insert data returned by a database query.
+--| 
+--| Format:  rigDBinsertQueryArray param1, param2[, param3]
+--|
+--| Parameters: string <pTableName>, array <pTableA> the array returned by a query, bool <pReplace> (optional)
+--|
+--| Return: empty
+----------------------------------------------------------------------*/
+
+command rigDBinsertQueryArray pTableName pTableA pReplace
+	local tTableKeys, tFieldNamesA, tNumFields
+	local tKey, tRowA, tFieldNum, tDataA
+
+	if pTableA is an array then
+
+		if pTableA["numrows"] > 0 then
+			put the keys of pTableA["resultarray"] into tTableKeys
+			sort lines of tTableKeys ascending numeric
+
+			put pTableA["fieldnames"] into tFieldNamesA
+			put the number of lines in the keys of tFieldNamesA into tNumFields
+
+			-- repeat for each key tKey in pTableA["resultarray"]
+			repeat for each line tKey in tTableKeys
+
+				put pTableA["resultarray"][tKey] into tRowA
+
+				repeat with tFieldNum = 1 to tNumFields 
+					put tRowA[tFieldNum] into tDataA[tFieldNamesA[tFieldNum]]
+				end repeat
+
+				get rigDbInsert(pTableName, tDataA, , pReplace)
+				if it is FALSE then
+					dbErrorHandling "Insertion failed!"
+				end if
+			end repeat
+		end if -- if pTableA["numrows"] > 0
+	end if -- if pTableA is an array
+end rigDBinsertQueryArray
+
+
+
+
+
+
+
+/*----------------------------------------------------------------------
 --| FUNCTION rigDbUpdate
 --|
 --| Author: rabit
