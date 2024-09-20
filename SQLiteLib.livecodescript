@@ -8,7 +8,7 @@ script "SQLiteLib"
 --
 -- ©2019 revIgniter.com
 --
--- Version 1.1.1
+-- Version 1.1.2
 --
 -- License: Apache 2.0
 --
